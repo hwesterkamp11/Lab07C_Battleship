@@ -71,13 +71,33 @@ public class GameBoard {
 
     public boolean isShipSunk(int row, int col) {
         if(board[row][col] != 'S') return false;
-        for(int i = 0; i < SIZE; i++) {
-            for(int j = 0; j < SIZE; j++) {
-                if(board[i][j] == 'S' && !hitMarkers[i][j]) {
-                    return false;
-                }
+
+        boolean horizontal = (col > 0 && board[row][col - 1] == 'S') || (col < SIZE - 1 && board[row][col + 1] == 'S');
+        boolean vertical = (row > 0 && board[row - 1][col] == 'S') || (row < SIZE - 1 && board[row + 1][col] == 'S');
+        if(horizontal) {
+            int left = col;
+            while(left >= 0 && board[row][left] == 'S') {
+                if(!hitMarkers[row][left]) return false;
+                left--;
+            }
+            int right = col;
+            while(right < SIZE && board[row][right] == 'S') {
+                if(!hitMarkers[row][right]) return false;
+                right++;
+            }
+        } else if(vertical) {
+            int up = row;
+            while(up >= 0 && board[up][col] == 'S') {
+                if(!hitMarkers[up][col]) return false;
+                up--;
+            }
+            int down = row;
+            while(down < SIZE && board[down][col] == 'S') {
+                if(!hitMarkers[down][col]) return false;
+                down++;
             }
         }
+
         return true;
     }
 }
